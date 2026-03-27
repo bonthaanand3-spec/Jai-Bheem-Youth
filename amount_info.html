@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amount Info - JAI BHEEM YOUTH TIRUGUDUMETTA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+            --accent-color: #4cc9f0;
+            --header-bg: transparent;
+            --light-blue: #4cc9f0;
+            --footer-bg: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Navigation Bar --- */
+        nav {
+            width: 100%;
+            min-height: 70px;
+            background: var(--header-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--light-blue);
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-links a, .lang-btn {
+            text-decoration: none;
+            color: white;
+            background-color: var(--light-blue);
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .lang-btn:hover {
+            background-color: #38b2db;
+            transform: scale(1.05);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: var(--light-blue);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            transform-origin: left;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+
+        @media(max-width:768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 15px;
+                gap: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                border-radius: 10px;
+                min-width: 150px;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .nav-links a, .lang-btn {
+                width: 100%;
+                text-align: center;
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* --- Main Content --- */
+        .content-container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        /* --- Balance Card --- */
+        .balance-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        .balance-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 10px 0;
+        }
+
+        .balance-label {
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* --- Table Styling --- */
+        .table-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow-x: auto;
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #fff;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- Footer --- */
+        footer {
+            width: 100%;
+            padding: 20px 0;
+            background: transparent;
+            text-align: center;
+            font-weight: bold;
+            color: white;
+            margin-top: auto;
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 600px) {
+            .balance-amount { font-size: 2rem; }
+            th, td { padding: 10px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo" id="siteLogo" data-en="JAI BHEEM YOUTH TIRUGUDUMETTA" data-te="జై భీమ్ యూత్ తిరుగుడుమెట్ట">JAI BHEEM YOUTH TIRUGUDUMETTA</div>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" id="navDash" data-en="Dashboard" data-te="డాష్‌బోర్డ్">Dashboard</a>
+            <a href="admin.html" id="navLogin" data-en="Login" data-te="లాగిన్">Login</a>
+            <button class="lang-btn" onclick="toggleLanguage()">తెలుగు / EN</button>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <h1 id="mainTitle" data-en="Amount Information" data-te="నగదు సమాచారం">Amount Information</h1>
+        <div class="balance-card">
+            <div class="balance-label" id="lblBalance" data-en="Current Available Balance" data-te="ప్రస్తుత అందుబాటులో ఉన్న నగదు">Current Available Balance</div>
+            <div class="balance-amount" id="firebaseBalance">₹ 0</div>
+            <div id="lastUpdated" style="color: #4ade80; font-size: 0.9rem;">Fetching Live Data...</div>
+        </div>
+
+        <div class="table-container">
+            <table id="amountTable">
+                <thead>
+                    <tr>
+                        <th id="thDate" data-en="Date" data-te="తేదీ">Date</th>
+                        <th id="thDesc" data-en="Description" data-te="వివరణ">Description</th>
+                        <th id="thType" data-en="Type" data-te="రకం">Type</th>
+                        <th id="thAmount" data-en="Amount" data-te="మొత్తం">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="amountTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer id="footerText">
+        <span data-en="© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by jyothi anand" data-te="© 2026 జై భీమ్ యూత్ తిరుగుడుమెట్ట. Developed by జ్యోతి ఆనంద్">© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by jyothi anand</span>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDKD7z3zhTBj6zJolbLQF0Kug3YelLZnRU",
+            authDomain: "jai-bheem-youth-2b132.firebaseapp.com",
+            projectId: "jai-bheem-youth-2b132",
+            storageBucket: "jai-bheem-youth-2b132.firebasestorage.app",
+            messagingSenderId: "677026912569",
+            appId: "1:677026912569:web:85e9418ddc5db518f070e8",
+            measurementId: "G-8YQQL1TDMH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const colRef = collection(db, "jaiBheemYouthData");
+
+        onSnapshot(query(colRef, orderBy("date", "desc")), (snapshot) => {
+            let totalBalance = 0;
+            let transactionList = [];
+
+            // Process all docs to calculate balance and prepare a list
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const collected = parseFloat(data.collected) || 0;
+                const donated = parseFloat(data.donated) || 0;
+                totalBalance += (collected - donated);
+
+                // Add separate transactions for list rendering
+                if (collected > 0) {
+                    transactionList.push({
+                        date: data.date,
+                        desc: `${data.name} (Contribution)`,
+                        type: 'Credit',
+                        amount: collected,
+                        color: '#4ade80',
+                        prefix: '+'
+                    });
+                }
+                if (donated > 0) {
+                    transactionList.push({
+                        date: data.date,
+                        desc: `${data.name} (Donation/Expense)`,
+                        type: 'Debit',
+                        amount: donated,
+                        color: '#f87171',
+                        prefix: '-'
+                    });
+                }
+            });
+
+            // Update Total Balance Display
+            document.getElementById('firebaseBalance').innerText = `₹ ${totalBalance.toLocaleString('en-IN')}`;
+
+            // Show only latest 4 transactions
+            const latestFour = transactionList.slice(0, 4);
+            let tableHTML = "";
+            
+            latestFour.forEach(t => {
+                tableHTML += `<tr>
+                    <td>${t.date}</td>
+                    <td>${t.desc}</td>
+                    <td style="color: ${t.color};">${t.type}</td>
+                    <td>${t.prefix} ₹ ${t.amount.toLocaleString('en-IN')}</td>
+                </tr>`;
+            });
+
+            document.getElementById('amountTableBody').innerHTML = tableHTML;
+            
+            const now = new Date();
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            document.getElementById('lastUpdated').innerText = `Updated: ${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+        });
+    </script>
+
+    <script>
+        let currentLang = 'en';
+        const translations = {
+            en: {
+                logo: "JAI BHEEM YOUTH TIRUGUDUMETTA",
+                navDash: "Dashboard",
+                navLogin: "Login",
+                title: "Amount Information",
+                balance: "Current Available Balance",
+                thDate: "Date",
+                thDesc: "Description",
+                thType: "Type",
+                thAmount: "Amount",
+                footer: "© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by జ్యోతి ఆనంద్"
+            },
+            te: {
+                logo: "జై భీమ్ యూత్ తిరుగుడుమెట్ట",
+                navDash: "డాష్‌బోర్డ్",
+                navLogin: "లాగిన్",
+                title: "నగదు సమాచారం",
+                balance: "ప్రస్తుత అందుబాటులో ఉన్న నగదు",
+                thDate: "తేదీ",
+                thDesc: "వివరణ",
+                thType: "రకం",
+                thAmount: "మొత్తం",
+                footer: "© సర్వ హక్కులు జై భీమ్ యూత్ తిరుగుడుమెట్ట కు పరిరక్షించబడ్డాయి| అభివృద్ధి చేసిన వారు: బట్టు హర్ష వర్ధన్"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'te' : 'en';
+            document.querySelectorAll("[data-en]").forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+
+        // Hamburger Menu Toggle
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hamburgerBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking anywhere on page
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                hamburgerBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking a nav link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

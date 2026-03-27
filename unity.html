@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity for Humanity - JAI BHEEM YOUTH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+            --accent-color: #4cc9f0;
+            --header-bg: transparent; 
+            --nav-text: #ffffff; 
+            --light-blue: #4cc9f0;
+            --heart-red: #ff4d4d;
+        }
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        .video-bg {
+            position: fixed;
+            right: 0; bottom: 0;
+            min-width: 100%; min-height: 100%;
+            z-index: -2;
+            object-fit: cover;
+        }
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.82); 
+            z-index: -1;
+        }
+        nav {
+            width: 100%; min-height: 70px; background: var(--header-bg);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 5%; box-sizing: border-box; position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-size: 1.4rem; font-weight: 900; color: var(--light-blue); text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--nav-text); font-weight: 800; font-size: 0.95rem; text-transform: uppercase; }
+        .lang-btn { background: var(--light-blue); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: var(--light-blue);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            transform-origin: left;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+
+        @media(max-width:768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 15px;
+                gap: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                border-radius: 10px;
+                min-width: 150px;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .nav-links a, .lang-btn {
+                width: 100%;
+                text-align: center;
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
+        }
+
+        .content-container { 
+            width: 90%; max-width: 1000px; margin: 50px auto; 
+            text-align: center; position: relative; z-index: 1; 
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 40px; color: white; }
+
+        .dashboard-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px; margin-bottom: 50px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(12px);
+            padding: 30px; border-radius: 25px; border: 1px solid var(--glass-border);
+            color: white;
+        }
+        .stat-card h2 { font-size: 2.4rem; margin: 10px 0; color: var(--accent-color); }
+        .stat-card p { font-size: 1rem; text-transform: uppercase; font-weight: 600; opacity: 0.9; }
+
+        .help-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; color: white; }
+        .family-circle {
+            width: 150px; height: 150px; border-radius: 50%;
+            background: var(--light-blue); color: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            cursor: pointer; transition: 0.4s;
+            border: 5px solid white; box-shadow: 0 0 30px rgba(76, 201, 240, 0.6);
+        }
+        .family-circle i { font-size: 2rem; color: var(--heart-red); animation: heartBeat 1.3s infinite; }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.3); }
+            30% { transform: scale(1); }
+        }
+
+        .modal {
+            display: none; position: fixed; z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.92); backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: white; color: #333; margin: 5% auto; padding: 35px;
+            width: 90%; max-width: 800px; border-radius: 20px; position: relative;
+            max-height: 80vh; overflow-y: auto;
+        }
+        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 30px; cursor: pointer; color: #aaa; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: #f9f9f9; color: #333; }
+
+        .pdf-box { background: var(--glass-bg); padding: 40px; border-radius: 25px; margin-top: 50px; border: 1px solid var(--glass-border); color: white; }
+        input[type="month"] { padding: 12px; border-radius: 10px; border: none; margin: 10px; font-size: 1rem; }
+        .btn-pdf { background: #27ae60; color: white; padding: 12px 30px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+
+        footer { padding: 30px 0; color: #ffffff; text-align: center; position: relative; z-index: 1; }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop playsinline class="video-bg">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-holding-hands-of-an-elderly-person-close-up-34449-large.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <nav>
+        <div class="logo" id="siteLogo">JAI BHEEM YOUTH TIRUGUDUMETTA</div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="admin.html">Admin Login</a>
+            <button class="lang-btn" onclick="toggleLanguage()">తెలుగు / EN</button>
+        </div>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <div class="content-container">
+        <h1 id="mainTitle">Unity For Humanity</h1>
+
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <h2 id="valCollected">₹ 0</h2>
+                <p id="lblCollected">Total Collected</p>
+            </div>
+            <div class="stat-card">
+                <h2 id="valInvested">₹ 0</h2>
+                <p id="lblInvested">Total Spent</p>
+            </div>
+            <div class="stat-card">
+                <h2 id="valRemaining" style="color: #2ecc71;">₹ 0</h2>
+                <p id="lblRemaining">Remaining Balance</p>
+            </div>
+        </div>
+
+        <div class="help-section">
+            <h3 id="helpHeading">People We Helped</h3>
+            <div class="family-circle" onclick="openModal()">
+                <i class="fas fa-heart"></i>
+                <span id="familyCount">0</span>
+                <label id="lblFamilies">Families</label>
+            </div>
+            <p id="clickHint">Click the beating heart to see the list</p>
+        </div>
+
+        <div class="pdf-box">
+            <h3 id="pdfTitle">Download Monthly Helping Report</h3>
+            <input type="month" id="reportMonth">
+            <button class="btn-pdf" onclick="generatePDF()">
+                <i class="fas fa-file-pdf"></i> <span id="btnPdfText">Download PDF</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="familyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" style="color: #4cc9f0;">Beneficiary List</h2>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Amount Spent</th>
+                        </tr>
+                    </thead>
+                    <tbody id="familyTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footerText">
+        <span data-en="© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by jyothi anand" data-te="© 2026 జై భీమ్ యూత్ తిరుగుడుమెట్ట. Developed by జ్యోతి ఆనంద్">© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by jyothi anand</span>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDKD7z3zhTBj6zJolbLQF0Kug3YelLZnRU",
+            authDomain: "jai-bheem-youth-2b132.firebaseapp.com",
+            projectId: "jai-bheem-youth-2b132",
+            storageBucket: "jai-bheem-youth-2b132.firebasestorage.app",
+            messagingSenderId: "677026912569",
+            appId: "1:677026912569:web:85e9418ddc5db518f070e8",
+            measurementId: "G-8YQQL1TDMH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        const section3Ref = collection(db, "beneficiaryFamilies"); // Section 3: Helping Hands (Spent)
+        const section4Ref = collection(db, "donors");              // Section 4: People Who Helped (Collected)
+
+        let section3Data = [];
+        let section4Data = [];
+
+        function renderDashboard() {
+            let totalCollectedGlobal = 0;
+            let totalSpentGlobal = 0;
+            let listHtml = "";
+
+            // Calculate Total Collected from Section 4 (People Who Helped)
+            section4Data.forEach(item => {
+                totalCollectedGlobal += parseFloat(item.collected || 0);
+            });
+
+            // Calculate Total Spent from Section 3 (Helping Hands)
+            section3Data.forEach(data => {
+                totalSpentGlobal += parseFloat(data.spent || 0);
+                // Populate Modal Table with Beneficiary (Spent) data
+                listHtml += `
+                    <tr>
+                        <td><b>${data.name || 'N/A'}</b></td>
+                        <td><span style="color: #27ae60;">${data.purpose || 'Aid'}</span></td>
+                        <td>${data.dateTime ? data.dateTime.split('T')[0] : 'N/A'}</td>
+                        <td style="font-weight: bold;">₹${data.spent || 0}</td>
+                    </tr>
+                `;
+            });
+
+            const remainingBalance = totalCollectedGlobal - totalSpentGlobal;
+
+            document.getElementById('valCollected').innerText = `₹ ${totalCollectedGlobal.toLocaleString('en-IN')}`;
+            document.getElementById('valInvested').innerText = `₹ ${totalSpentGlobal.toLocaleString('en-IN')}`;
+            document.getElementById('valRemaining').innerText = `₹ ${remainingBalance.toLocaleString('en-IN')}`;
+            
+            document.getElementById('familyCount').innerText = section3Data.length;
+            document.getElementById('familyTableBody').innerHTML = listHtml || "<tr><td colspan='4' align='center'>No records found</td></tr>";
+        }
+
+        onSnapshot(section3Ref, (snap) => {
+            section3Data = snap.docs.map(doc => doc.data());
+            renderDashboard();
+        });
+
+        onSnapshot(section4Ref, (snap) => {
+            section4Data = snap.docs.map(doc => doc.data());
+            renderDashboard();
+        });
+
+        window.generatePDF = () => {
+            const selectedMonth = document.getElementById('reportMonth').value;
+            if(!selectedMonth) return alert("Please select a month first!");
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const pdfRows = [];
+            let monthlyTotalCollected = 0;
+
+            // PDF logic to track COLLECTED from Section 4 (People Who Helped)
+            section4Data.forEach(item => {
+                const dateToCheck = item.date || "";
+                if(dateToCheck.startsWith(selectedMonth)) {
+                    pdfRows.push([
+                        item.name || "N/A", 
+                        dateToCheck, 
+                        `Rs. ${item.collected || 0}`
+                    ]);
+                    monthlyTotalCollected += parseFloat(item.collected || 0);
+                }
+            });
+
+            if(pdfRows.length === 0) return alert("No donor records found for this month.");
+
+            doc.setFontSize(18);
+            doc.text("JAI BHEEM YOUTH TIRUGUDUMETTA - People Who Helped Report", 14, 20);
+            doc.setFontSize(12);
+            doc.text(`Month: ${selectedMonth} | Monthly Total Collected: Rs. ${monthlyTotalCollected}`, 14, 30);
+
+            doc.autoTable({
+                head: [['Helper Name', 'Date', 'Amount Collected']],
+                body: pdfRows,
+                startY: 35,
+                theme: 'grid'
+            });
+
+            doc.save(`People_Who_Helped_Report_${selectedMonth}.pdf`);
+        };
+    </script>
+
+    <script>
+        let currentLang = 'en';
+        const translations = {
+            en: { title: "Unity For Humanity", col: "Total Collected", spent: "Total Spent", rem: "Remaining Balance", families: "Families", help: "People We Helped" },
+            te: { title: "మానవత్వం కోసం ఐక్యం", col: "మొత్తం వసూలు", spent: "మొత్తం ఖర్చు", rem: "మిగిలిన నగదు", families: "కుటుంబాలు", help: "మేము సహాయం చేసిన వ్యక్తులు" }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'te' : 'en';
+            const t = translations[currentLang];
+            document.getElementById('mainTitle').innerText = t.title;
+            document.getElementById('lblCollected').innerText = t.col;
+            document.getElementById('lblInvested').innerText = t.spent;
+            document.getElementById('lblRemaining').innerText = t.rem;
+            document.getElementById('lblFamilies').innerText = t.families;
+            document.getElementById('helpHeading').innerText = t.help;
+        }
+
+        function openModal() { document.getElementById('familyModal').style.display = "block"; }
+        function closeModal() { document.getElementById('familyModal').style.display = "none"; }
+        window.onclick = (e) => { if(e.target.className === 'modal') closeModal(); }
+
+        // Hamburger Menu Toggle
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hamburgerBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking anywhere on page
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                hamburgerBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking a nav link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Information - JAI BHEEM YOUTH TIRUGUDUMETTA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+            --accent-color: #4cc9f0;
+            --brand-blue: #0084ff;
+            --header-bg: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                        url('https://res.cloudinary.com/teepublic/image/private/s--qU-WVBG2--/t_Resized%20Artwork/c_fit,g_north_west,h_954,w_954/co_000000,e_outline:48/co_000000,e_outline:inner_fill:48/co_ffffff,e_outline:48/co_ffffff,e_outline:inner_fill:48/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/t_watermark_lock/c_limit,f_auto,h_630,q_auto:good:420,w_630/v1653116155/production/designs/30589163_0.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Navigation Bar --- */
+        nav {
+            width: 100%;
+            min-height: 70px;
+            background: var(--header-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--brand-blue);
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-links a, .lang-btn {
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: var(--brand-blue);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            transform-origin: left;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+
+        @media(max-width:768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 15px;
+                gap: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                border-radius: 10px;
+                min-width: 150px;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .nav-links a, .lang-btn {
+                width: 100%;
+                text-align: center;
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* --- Content Area --- */
+        .content-wrapper {
+            max-width: 900px; 
+            margin: 40px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        /* --- Board Grid Updated to 2 Columns --- */
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .member-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .member-img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .member-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+        }
+
+        .member-role {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .phone-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .phone-link:hover {
+            background: #2ecc71;
+            transform: scale(1.05);
+        }
+
+        /* --- Structure Table --- */
+        .structure-section {
+            margin-top: 60px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        th {
+            color: var(--accent-color);
+            text-transform: uppercase;
+        }
+
+        footer {
+            width: 100%;
+            padding: 25px 0;
+            background: transparent;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--brand-blue);
+            margin-top: auto;
+        }
+
+        /* --- Mobile Responsiveness (1 Member per row) --- */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .board-grid {
+                grid-template-columns: 1fr; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo" id="siteLogo" data-en="JAI BHEEM YOUTH TIRUGUDUMETTA" data-te="జై భీమ్ యూత్ తిరుగుడుమెట్ట">JAI BHEEM YOUTH TIRUGUDUMETTA</div>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" id="navDash" data-en="Dashboard" data-te="డాష్‌బోర్డ్">Dashboard</a>
+            <a href="admin.html" id="navAdmin" data-en="Admin Login" data-te="అడ్మిన్ లాగిన్">Admin Login</a>
+            <button class="lang-btn" onclick="toggleLanguage()">తెలుగు / EN</button>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <h1 id="mainTitle" data-en="Board Information" data-te="బోర్డు సమాచారం">Board Information</h1>
+<p class="subtitle" id="mainSubtitle" data-en="The dedicated team leading JAI BHEEM YOUTH TIRUGUDUMETTA towards a better future." data-te="జై భీమ్ యూత్ ను మెరుగైన భవిష్యత్తు వైపు నడిపిస్తున్న అంకితభావం గల బృందం.">The dedicated team leading JAI BHEEM YOUTH TIRUGUDUMETTA towards a better future.</p>
+
+        <div class="board-grid" id="memberGrid">
+            <p id="loadingText" data-en="Loading board members..." data-te="సభ్యుల వివరాలు లోడ్ అవుతున్నాయి...">Loading board members...</p>
+        </div>
+
+        <div class="structure-section">
+            <h3 id="roleTitle" data-en="Organizational Roles" data-te="సంస్థాగత పాత్రలు">Organizational Roles</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th id="thRole" data-en="Role" data-te="పాత్ర">Role</th>
+                    </tr>
+                </thead>
+                <tbody id="rolesTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer id="footerText">
+        <span data-en="© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by jyothi anand" data-te="© 2026 జై భీమ్ యూత్ తిరుగుడుమెట్ట. Developed by జ్యోతి ఆనంద్">© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by jyothi anand</span>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDKD7z3zhTBj6zJolbLQF0Kug3YelLZnRU",
+            authDomain: "jai-bheem-youth-2b132.firebaseapp.com",
+            projectId: "jai-bheem-youth-2b132",
+            storageBucket: "jai-bheem-youth-2b132.firebasestorage.app",
+            messagingSenderId: "677026912569",
+            appId: "1:677026912569:web:85e9418ddc5db518f070e8",
+            measurementId: "G-8YQQL1TDMH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- HANDLE BOARD MEMBERS AND DYNAMIC ROLES ---
+        const boardRef = collection(db, "boardMembers");
+        onSnapshot(boardRef, (snapshot) => {
+            const memberGrid = document.getElementById('memberGrid');
+            const rolesTable = document.getElementById('rolesTableBody');
+            
+            memberGrid.innerHTML = ''; 
+            rolesTable.innerHTML = '';
+
+            const members = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            // SORT MEMBERS BY POSITION (pos field)
+            members.sort((a, b) => (a.pos || 0) - (b.pos || 0));
+
+            // Set to keep track of unique roles
+            const uniqueRoles = new Set();
+
+            if (members.length === 0) {
+                memberGrid.innerHTML = '<p>No board members found.</p>';
+                rolesTable.innerHTML = '<tr><td>No roles available.</td></tr>';
+            } else {
+                members.forEach(m => {
+                    // Populate Grid using m.photoUrl to match Admin Page field
+                    memberGrid.innerHTML += `
+                        <div class="member-card">
+                            <img src="${m.photoUrl || 'https://via.placeholder.com/140'}" alt="${m.name}" class="member-img">
+                            <div class="member-name">${m.name}</div>
+                            <span class="member-role">${m.role}</span>
+                            <a href="tel:+91${m.phone}" class="phone-link">
+                                <i class="fas fa-phone"></i> +91 ${m.phone}
+                            </a>
+                        </div>
+                    `;
+                    // Track Roles for the structure table
+                    if(m.role) uniqueRoles.add(m.role);
+                });
+
+                // Populate Roles Table based on unique roles found
+                uniqueRoles.forEach(role => {
+                    rolesTable.innerHTML += `<tr><td>${role}</td></tr>`;
+                });
+            }
+        });
+    </script>
+
+    <script>
+        let currentLang = 'en';
+        const translations = {
+            en: {
+                logo: "JAI BHEEM YOUTH TIRUGUDUMETTA",
+                navDash: "Dashboard",
+                navAdmin: "Admin Login",
+                title: "Board Information",
+                subtitle: "The dedicated team leading JAI BHEEM YOUTH towards a better future.",
+                loading: "Loading board members...",
+                roleTitle: "Organizational Roles",
+                thRole: "Role",
+                footer: "© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by జ్యోతి ఆనంద్"
+            },
+            te: {
+                logo: "జై భీమ్ యూత్ తిరుగుడుమెట్ట",
+                navDash: "డాష్‌బోర్డ్",
+                navAdmin: "అడ్మిన్ లాగిన్",
+                title: "బోర్డు సమాచారం",
+                subtitle: "జై భీమ్ యూత్ ను మెరుగైన భవిష్యత్తు వైపు నడిపిస్తున్న అంకితభావం గల బృందం.",
+                loading: "సభ్యుల వివరాలు లోడ్ అవుతున్నాయి...",
+                roleTitle: "సంస్థాగత పాత్రలు",
+                thRole: "పాత్ర",
+                footer: "© 2026 జై భీమ్ యూత్ తిరుగుడుమెట్ట. అభివృద్ధి చేసిన వారు: బట్టు హర్ష వర్ధన్"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'te' : 'en';
+            document.querySelectorAll("[data-en]").forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+
+        // Hamburger Menu Toggle
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hamburgerBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking anywhere on page
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                hamburgerBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking a nav link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+
+</body>
+</html>

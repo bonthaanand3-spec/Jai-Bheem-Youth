@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>JAI BHEEM YOUTH TIRUGUDUMETTA Social Media</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffffff; /* Changed to White for transparent header */
+            --accent: #4cc9f0;
+            --glass: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+        * {            box-sizing: border-box;            margin: 0;            padding: 0;        }
+        body {
+            font-family: 'Poppins', 'Noto Sans Telugu', sans-serif;
+            background: #001f3f;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        /* ===== BACKGROUND ===== */
+        video#bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,31,63,0.8));
+            z-index: -1;
+        }
+        /* ===== HEADER & NAV ===== */
+        .header-nav {
+            background: transparent; /* Made Transparent */
+            padding: 20px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .back-btn {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .back-btn:hover { color: var(--accent); }
+        .header-title {
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        /* ===== PROFILE ===== */
+        .profile {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+        .profile img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--accent);
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.4);
+            object-fit: cover;
+        }
+        /* ===== GRID ===== */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto 100px;
+        }
+        .grid-item {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 25px 15px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        .grid-item:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--accent);
+        }
+        .grid-item img {
+            width: 55px;
+            height: 55px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+        }
+        .grid-item p {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        /* ===== FOOTER ===== */
+        footer {
+            background: transparent; /* Made Transparent */
+            color: #ffffff; /* Changed to White */
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        }
+        /* ===== MOBILE ===== */
+        @media (max-width: 480px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 12px;
+            }
+            .header-title { font-size: 0.9rem; }
+            .grid-item { padding: 20px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="bg" playsinline>
+        <source src="s1.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <nav class="header-nav">
+        <a href="javascript:history.back()" class="back-btn">←</a>
+        <div class="header-title" id="dashTitle">JAI BHEEM YOUTH Social Media</div>
+    </nav>
+    <div class="profile">
+        <img src="https://static.toiimg.com/photo/imgsize-494151,msid-75135268/75135268.jpg" alt="JAI BHEEM YOUTH" />
+    </div>
+    <div class="grid-container">
+        <div class="grid-item" id="btnYoutube">
+            <img src="https://w0.peakpx.com/wallpaper/130/318/HD-wallpaper-youtube-pink-logo-pink-neon-lights-social-network-creative-pink-abstract-background-youtube-logo-youtube.jpg" alt="YouTube">
+            <p id="yt">YouTube</p>
+        </div>
+        <div class="grid-item" id="btnInstagram">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEBFXCirT08g-Mqzt1m6oD1Z6Dw4Oc9XqwDw&s" alt="Instagram">
+            <p id="insta">Instagram</p>
+        </div>
+        <div class="grid-item" id="btnWhatsapp">
+            <img src="https://tse1.mm.bing.net/th?id=OIP.Eif37cBwT_mfc-BCXYWrXQHaHa&pid=Api&P=0&h=180" alt="WhatsApp">
+            <p id="wa">WhatsApp</p>
+        </div>
+        <div class="grid-item" id="btnFacebook">
+            <img src="https://tse2.mm.bing.net/th?id=OIP.ZDqxO7pFyf3EU0a3NODKJgHaFX&pid=Api&P=0&h=180" alt="Facebook">
+            <p id="fb">Facebook</p>
+        </div>
+    </div>
+    <footer id="footerText">
+        <span data-en="© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA | Developed by jyothi anand" data-te="© 2026 జై భీమ్ యూత్ తిరుగుడుమెట్ట | Developed by జ్యోతి ఆనంద్">© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA | Developed by jyothi anand</span>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDKD7z3zhTBj6zJolbLQF0Kug3YelLZnRU",
+            authDomain: "jai-bheem-youth-2b132.firebaseapp.com",
+            projectId: "jai-bheem-youth-2b132",
+            storageBucket: "jai-bheem-youth-2b132.firebasestorage.app",
+            messagingSenderId: "677026912569",
+            appId: "1:677026912569:web:85e9418ddc5db518f070e8",
+            measurementId: "G-8YQQL1TDMH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const settingsRef = doc(db, "settings", "socialLinks");
+
+        // Fetch links from Firebase
+        onSnapshot(settingsRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                
+                document.getElementById('btnYoutube').onclick = () => window.open(data.youtube || '#', '_blank');
+                document.getElementById('btnInstagram').onclick = () => window.open(data.instagram || '#', '_blank');
+                document.getElementById('btnWhatsapp').onclick = () => window.open(data.whatsapp || '#', '_blank');
+                document.getElementById('btnFacebook').onclick = () => window.open(data.facebook || '#', '_blank');
+            }
+        });
+    </script>
+
+    <script>
+        let currentLang = 'en';
+        
+        // Initialize footer with current language
+        document.querySelectorAll("[data-en]").forEach(el => {
+            el.textContent = el.getAttribute(`data-${currentLang}`);
+        });
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'te' : 'en';
+            document.querySelectorAll("[data-en]").forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+        
+        // Keep existing footer toggle logic for backward compatibility
+        const english = {
+            dashTitle: "JAI BHEEM YOUTH TIRUGUDUMETTA Social Media",
+            yt: "YouTube",
+            insta: "Instagram",
+            wa: "WhatsApp",
+            fb: "Facebook"
+        };
+        const telugu = {
+            dashTitle: "జై భీమ్ యూత్ సోషల్ మీడియా",
+            yt: "యూట్యూబ్",
+            insta: "ఇన్‌స్టాగ్రామ్",
+            wa: "వాట్సాప్",
+            fb: "ఫేస్బుక్"
+        };
+        let isEnglish = true;
+        setInterval(() => {
+            const lang = isEnglish ? telugu : english;
+            document.getElementById("dashTitle").textContent = lang.dashTitle;
+            document.getElementById("yt").textContent = lang.yt;
+            document.getElementById("insta").textContent = lang.insta;
+            document.getElementById("wa").textContent = lang.wa;
+            document.getElementById("fb").textContent = lang.fb;
+            // Update footer text
+            document.querySelectorAll("[data-en]").forEach(el => {
+                el.textContent = el.getAttribute(`data-${isEnglish ? 'te' : 'en'}`);
+            });
+            isEnglish = !isEnglish;
+        }, 3000);
+    </script>
+</body>
+</html>

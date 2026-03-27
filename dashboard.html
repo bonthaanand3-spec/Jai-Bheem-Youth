@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAI BHEEM YOUTH Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0084ff;
+            --accent: #4cc9f0;
+            --glass: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Telugu', sans-serif;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: #0f172a; 
+        }
+
+        /* ===== BACKGROUND ===== */
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+        }
+        .video-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+            z-index: -1;
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.15); /* Transparent Background */
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-weight: 800;
+            color: #fff; /* Changed to white for better visibility on transparent */
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .lang-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .lang-toggle:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        /* ===== HERO ===== */
+        header {
+            text-align: center;
+            padding: 50px 20px 30px;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 8vw, 2.8rem);
+            text-transform: uppercase;
+            text-shadow: var(--text-shadow);
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== DASHBOARD GRID ===== */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 20px 120px; /* Added padding to prevent footer overlap */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .info-box {
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .info-box:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: var(--accent);
+        }
+
+        .icon-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            padding: 5px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .icon-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .text-label {
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-shadow: var(--text-shadow);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.15); /* Transparent Background */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* ===== MOBILE OPTIMIZATION ===== */
+        @media (max-width: 768px) {
+            nav { padding: 10px 15px; }
+            .nav-links { display: none; } 
+            .dashboard-container { 
+                grid-template-columns: 1fr; 
+                padding-bottom: 40px; /* Reduce bottom padding on mobile */
+            }
+            .info-box { padding: 25px 15px; }
+            
+            footer {
+                position: relative; /* Footer is no longer fixed on mobile */
+                background: rgba(0, 0, 0, 0.3); /* Darker transparent for mobile legibility */
+            }
+        }
+        
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+        
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: #fff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            transform-origin: left;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+        
+        @media(max-width:768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-right {
+                position: fixed;
+                top: 60px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 15px;
+                gap: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                transform: translateX(150%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                border-radius: 10px;
+                min-width: 150px;
+            }
+            
+            .nav-right.active {
+                transform: translateX(0);
+            }
+            
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-links a {
+                width: 100%;
+                text-align: center;
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
+            
+            .lang-toggle {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="video-bg">
+    <video autoplay muted loop playsinline>
+        <source src="./s1.mp4" type="video/mp4">
+    </video>
+</div>
+<div class="video-overlay"></div>
+
+<nav>
+    <div class="logo" data-en="JAI BHEEM YOUTH" data-te="జై భీమ్ యూత్">JAI BHEEM YOUTH</div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="nav-right" id="navRight">
+        <div class="nav-links">
+            <a href="#" data-en="Dashboard" data-te="డాష్‌బోర్డ్">Dashboard</a>
+        </div>
+        <button class="lang-toggle" id="langToggle" data-en="తెలుగు" data-te="English">తెలుగు</button>
+    </div>
+</nav>
+
+<header>
+    <h1 data-en="JAI BHEEM YOUTH TIRUGUDUMETTA" data-te="జై భీమ్ యూత్ తిరుగుడుమెట్ట">JAI BHEEM YOUTH TIRUGUDUMETTA</h1>
+</header>
+
+<div class="dashboard-container">
+    <div class="info-box" onclick="location.href='board_info.html'">
+        <div class="icon-container">
+            <img src="https://ih1.redbubble.net/image.3622621164.8232/st,small,507x507-pad,600x600,f8f8f8.jpg" alt="Board">
+        </div>
+        <div class="text-label" data-en="Board Information" data-te="బోర్డు సమాచారం">Board Information</div>
+    </div>
+
+    <div class="info-box" onclick="location.href='amount_info.html'">
+        <div class="icon-container">
+            <img src="https://cdn-icons-png.flaticon.com/512/913/913117.png" alt="Amount">
+        </div>
+        <div class="text-label" data-en="Amount Info" data-te="అమౌంట్ సమాచారం">Amount Info</div>
+    </div>
+
+    <div class="info-box" onclick="location.href='unity.html'">
+        <div class="icon-container">
+            <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&q=80&w=200" alt="Unity">
+        </div>
+        <div class="text-label" data-en="Unity for Humanity" data-te="మానవత్వం కోసం ఐక్యత">Unity for Humanity</div>
+    </div>
+
+    <div class="info-box" onclick="location.href='socialmedia.html'">
+        <div class="icon-container">
+            <img src="https://cdn.shopify.com/app-store/listing_images/882e3019891bbeaa48efd755a20450ad/icon/CPrUnsL4oYIDEAE=.png" alt="Social">
+        </div>
+        <div class="text-label" data-en="Social Media" data-te="సోషల్ మీడియా">Social Media</div>
+    </div>
+</div>
+
+<footer>
+    <span data-en="© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by jyothi anand" data-te="© 2026 జై భీమ్ యూత్ తిరుగుడుమెట్ట. Developed by జ్యోతి ఆనంద్">© 2026 JAI BHEEM YOUTH TIRUGUDUMETTA. Developed by jyothi anand</span>
+</footer>
+
+<script>
+    let currentLang = 'en';
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'en' ? 'te' : 'en';
+        document.querySelectorAll("[data-en]").forEach(el => {
+            el.textContent = el.getAttribute(`data-${currentLang}`);
+        });
+    }
+
+    // Language Toggle Button
+    const langToggle = document.getElementById('langToggle');
+    langToggle.addEventListener('click', () => {
+        toggleLanguage();
+    });
+
+    // Hamburger Menu Toggle
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navRight = document.getElementById('navRight');
+
+    hamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hamburgerBtn.classList.toggle('active');
+        navRight.classList.toggle('active');
+    });
+
+    // Close menu when clicking anywhere on page
+    document.addEventListener('click', (e) => {
+        if (!navRight.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+            hamburgerBtn.classList.remove('active');
+            navRight.classList.remove('active');
+        }
+    });
+
+    // Close menu when clicking a nav link
+    navRight.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburgerBtn.classList.remove('active');
+            navRight.classList.remove('active');
+        });
+    });
+</script>
+
+</body>
+</html>

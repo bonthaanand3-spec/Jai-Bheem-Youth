@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - JAI BHEEM YOUTH TIRUGUDUMETTA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --accent-color: #00f2fe;
+            --gradient-bg: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --danger-color: #ff4757;
+            --success-color: #2ed573;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: var(--gradient-bg);
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #loginSection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .login-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        #adminDashboard {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 80px;
+        }
+
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 95%;
+            max-width: 1100px;
+            margin-top: 20px;
+        }
+
+        .section-container {
+            width: 95%;
+            max-width: 1100px;
+            margin-top: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+        }
+
+        h1 {
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        th {
+            padding: 15px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        td:first-child {
+            border-radius: 15px 0 0 15px;
+            border-left: 1px solid var(--glass-border);
+        }
+
+        td:last-child {
+            border-radius: 0 15px 15px 0;
+            border-right: 1px solid var(--glass-border);
+            text-align: right;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-add {
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            color: #000;
+        }
+
+        .btn-delete {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-edit {
+            background: #ffa502;
+            color: white;
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .action-bar-bottom {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            padding: 40px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 450px;
+            border: 1px solid var(--accent-color);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .social-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .social-input-group i {
+            width: 30px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .photo-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            text-align: center;
+            color: #ccc;
+            overflow: hidden;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loginSection">
+        <div class="login-card">
+            <h2 style="color: var(--accent-color);">Admin Login</h2>
+            <p>Enter your Firebase email and password</p>
+            <div class="form-group" style="margin-top: 20px;">
+                <input type="email" id="loginEmail" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="loginPass" placeholder="Password" required>
+            </div>
+            <button class="btn btn-add" style="width: 100%;" onclick="handleLogin()">Login</button>
+        </div>
+    </div>
+
+    <div id="adminDashboard">
+        <div class="header-area">
+            <h1>Admin Page</h1>
+            <button class="btn btn-logout" onclick="handleLogout()">Logout</button>
+        </div>
+
+        <div class="section-container">
+            <h2>Board Members</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="50">Select</th>
+                        <th>Photo</th>
+                        <th>Member Name</th>
+                        <th>Role</th>
+                        <th>Phone</th>
+                        <th>Pos</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTableBody"></tbody>
+            </table>
+            <div class="action-bar-bottom">
+                <button class="btn btn-add" onclick="openMemberModal()">+ Add Member</button>
+                <button class="btn btn-delete" onclick="deleteSelectedMembers()">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <h2>Amount Info</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="50">Select</th>
+                        <th>Collector Name</th>
+                        <th>Date</th>
+                        <th>Collected</th>
+                        <th>Spent</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div class="action-bar-bottom">
+                <button class="btn btn-add" onclick="openDataModal()">+ Add New Record</button>
+                <button class="btn btn-delete" onclick="deleteSelectedData()">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <h2>Helping Hands</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="50">Select</th>
+                        <th>Name</th>
+                        <th>Date & Time</th>
+                        <th>Amount Spent (₹)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="familyTableBody"></tbody>
+            </table>
+            <div class="action-bar-bottom">
+                <button class="btn btn-add" onclick="openFamilyModal()">+ Add Family</button>
+                <button class="btn btn-delete" onclick="deleteSelectedFamilies()">Delete Selected</button>
+
+                <div class="filter-group">
+                    <label style="margin:0">Filter Month:</label>
+                    <select id="monthFilter" style="width: 150px; padding: 5px;" onchange="renderFamilyTable()">
+                        <option value="all">Show All</option>
+                        <option value="0">January</option>
+                        <option value="1">February</option>
+                        <option value="2">March</option>
+                        <option value="3">April</option>
+                        <option value="4">May</option>
+                        <option value="5">June</option>
+                        <option value="6">July</option>
+                        <option value="7">August</option>
+                        <option value="8">September</option>
+                        <option value="9">October</option>
+                        <option value="10">November</option>
+                        <option value="11">December</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <h2>People Who Helped</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="50">Select</th>
+                        <th>Helper Name</th>
+                        <th>Date</th>
+                        <th>Amount Collected (₹)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="donorsTableBody"></tbody>
+            </table>
+            <div class="action-bar-bottom">
+                <button class="btn btn-add" onclick="openDonorModal()">+ Add Helper</button>
+                <button class="btn btn-delete" onclick="deleteSelectedDonors()">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <h2>Social Media Links</h2>
+            <form id="socialLinksForm">
+                <div class="social-input-group">
+                    <i class="fab fa-youtube" style="color: #ff0000;"></i>
+                    <input type="url" id="linkYoutube" placeholder="YouTube Channel Link">
+                </div>
+                <div class="social-input-group">
+                    <i class="fab fa-instagram" style="color: #e4405f;"></i>
+                    <input type="url" id="linkInstagram" placeholder="Instagram Profile Link">
+                </div>
+                <div class="social-input-group">
+                    <i class="fab fa-facebook" style="color: #1877f2;"></i>
+                    <input type="url" id="linkFacebook" placeholder="Facebook Page Link">
+                </div>
+                <div class="social-input-group">
+                    <i class="fab fa-whatsapp" style="color: #25d366;"></i>
+                    <input type="url" id="linkWhatsapp" placeholder="WhatsApp Group/Contact Link">
+                </div>
+                <div class="action-bar-bottom">
+                    <button type="submit" class="btn btn-add">Update Links</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <h2 id="memberModalTitle">Add Board Member</h2>
+            <form id="memberForm">
+                <input type="hidden" id="memberEditId">
+                <input type="hidden" id="existingPhotoUrl">
+                <div class="form-group">
+                    <label>Member Photo (Optional)</label>
+                    <input type="file" id="mPhotoFile" accept="image/*">
+                </div>
+                <div class="form-group"><label>Member Name</label><input type="text" id="mName" required></div>
+                <div class="form-group"><label>Role</label><input type="text" id="mRole" required></div>
+                <div class="form-group"><label>Phone</label><input type="text" id="mPhone" required></div>
+                <div class="form-group"><label>Position (Order)</label><input type="number" id="mPos" required></div>
+                <div style="display: flex; gap: 15px;">
+                    <button type="submit" id="memberSaveBtn" class="btn btn-add" style="flex: 2;">Save</button>
+                    <button type="button" class="btn btn-delete" style="flex: 1;" onclick="closeMemberModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="familyModal" class="modal">
+        <div class="modal-content">
+            <h2 id="familyModalTitle">Add Beneficiary</h2>
+            <form id="familyForm">
+                <input type="hidden" id="familyEditId">
+                <div class="form-group">
+                    <label>Beneficiary Name</label>
+                    <input type="text" id="benName" required>
+                </div>
+                <div class="form-group">
+                    <label>Date & Time</label>
+                    <input type="datetime-local" id="benDateTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Amount Spent (₹)</label>
+                    <input type="number" id="benSpent" required>
+                </div>
+                <div class="form-group">
+                    <label>Village</label>
+                    <input type="text" id="benVillage" required>
+                </div>
+                <div class="form-group">
+                    <label>Purpose</label>
+                    <textarea id="benPurpose" rows="2" required></textarea>
+                </div>
+                <div style="display: flex; gap: 15px; margin-top: 20px;">
+                    <button type="submit" id="familySaveBtn" class="btn btn-add" style="flex: 2;">Save Record</button>
+                    <button type="button" class="btn btn-delete" style="flex: 1;" onclick="closeFamilyModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="dataModal" class="modal">
+        <div class="modal-content">
+            <h2 id="dataModalTitle">Donation Record</h2>
+            <form id="dataForm">
+                <input type="hidden" id="editId">
+                <div class="form-group"><label>Collector Name</label><input type="text" id="name" required></div>
+                <div class="form-group"><label>Date</label><input type="date" id="date" required></div>
+                <div class="form-group"><label>Amount Collected (₹)</label><input type="number" id="collected" required></div>
+                <div class="form-group"><label>Amount Spent (₹)</label><input type="number" id="donated" required></div>
+                <div class="form-group"><label>Purpose</label><input type="text" id="purpose" required></div>
+                <div style="display: flex; gap: 15px;">
+                    <button type="submit" id="dataSaveBtn" class="btn btn-add">Save</button>
+                    <button type="button" class="btn btn-delete" onclick="closeDataModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="donorModal" class="modal">
+        <div class="modal-content">
+            <h2 id="donorModalTitle">Add Helper</h2>
+            <form id="donorForm">
+                <input type="hidden" id="donorEditId">
+                <div class="form-group"><label>Helper Name</label><input type="text" id="donorName" required></div>
+                <div class="form-group"><label>Date</label><input type="date" id="donorDate" required></div>
+                <div class="form-group"><label>Amount Collected (₹)</label><input type="number" id="donorCollected" required></div>
+                <div style="display: flex; gap: 15px;">
+                    <button type="submit" id="donorSaveBtn" class="btn btn-add" style="flex: 2;">Save Record</button>
+                    <button type="button" class="btn btn-delete" style="flex: 1;" onclick="closeDonorModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDKD7z3zhTBj6zJolbLQF0Kug3YelLZnRU",
+            authDomain: "jai-bheem-youth-2b132.firebaseapp.com",
+            projectId: "jai-bheem-youth-2b132",
+            storageBucket: "jai-bheem-youth-2b132.firebasestorage.app",
+            messagingSenderId: "677026912569",
+            appId: "1:677026912569:web:85e9418ddc5db518f070e8",
+            measurementId: "G-8YQQL1TDMH"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const settingsRef = db.doc("settings/socialLinks");
+
+        const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dbvlc2xux/image/upload';
+        const CLOUDINARY_UPLOAD_PRESET = 'JAI BHEEM';
+
+        let entries = [], families = [], donors = [], members = [];
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'flex';
+                loadAllData();
+            } else {
+                document.getElementById('loginSection').style.display = 'flex';
+                document.getElementById('adminDashboard').style.display = 'none';
+            }
+        });
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPass').value;
+            try { await auth.signInWithEmailAndPassword(email, pass); } 
+            catch (e) { alert('Login failed: ' + e.message); }
+        };
+
+        window.handleLogout = async () => { await auth.signOut(); };
+
+        function loadAllData() {
+            db.collection("jaiBheemYouthData").onSnapshot((s) => { entries = s.docs.map(d => ({ id: d.id, ...d.data() })); renderDataTable(); }, (err) => console.error("Firestore Error:", err));
+            db.collection("beneficiaryFamilies").onSnapshot((s) => { families = s.docs.map(d => ({ id: d.id, ...d.data() })); renderFamilyTable(); });
+            db.collection("donors").onSnapshot((s) => { donors = s.docs.map(d => ({ id: d.id, ...d.data() })); renderDonorsTable(); });
+            db.collection("boardMembers").onSnapshot((s) => { members = s.docs.map(d => ({ id: d.id, ...d.data() })); renderMemberTable(); });
+            loadSocialLinks();
+        }
+
+        // --- MEMBER LOGIC ---
+        window.openMemberModal = () => {
+            document.getElementById('memberForm').reset();
+            document.getElementById('memberEditId').value = "";
+            document.getElementById('existingPhotoUrl').value = "";
+            document.getElementById('memberModalTitle').innerText = "Add Board Member";
+            document.getElementById('memberModal').style.display = 'flex';
+        };
+        window.closeMemberModal = () => document.getElementById('memberModal').style.display = 'none';
+
+        document.getElementById('memberForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('memberEditId').value;
+            const file = document.getElementById('mPhotoFile').files[0];
+            const btn = document.getElementById('memberSaveBtn');
+            let photoUrl = document.getElementById('existingPhotoUrl').value || "";
+
+            try {
+                btn.disabled = true; btn.innerText = "Uploading...";
+                if (file) {
+                    const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                    const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: fd });
+                    const data = await res.json(); photoUrl = data.secure_url;
+                }
+                const payload = {
+                    photoUrl: photoUrl,
+                    name: document.getElementById('mName').value,
+                    role: document.getElementById('mRole').value,
+                    phone: document.getElementById('mPhone').value,
+                    pos: parseInt(document.getElementById('mPos').value)
+                };
+                if(!id) await db.collection("boardMembers").add(payload);
+                else await db.doc("boardMembers/" + id).update(payload);
+                closeMemberModal();
+            } catch (err) { alert("Save Failed: " + err.message); }
+            finally { btn.disabled = false; btn.innerText = "Save"; }
+        };
+
+        function renderMemberTable() {
+            const sorted = members.sort((a,b) => a.pos - b.pos);
+            document.getElementById('memberTableBody').innerHTML = sorted.map(m => `
+                <tr>
+                    <td><input type="checkbox" class="mem-check" data-id="${m.id}"></td>
+                    <td><img src="${m.photoUrl || ''}" class="photo-circle" onerror="this.src='https://via.placeholder.com/40'"></td>
+                    <td>${m.name}</td><td>${m.role}</td><td>${m.phone}</td><td>${m.pos}</td>
+                    <td><button class="btn btn-edit" onclick="editMember('${m.id}')">Edit</button></td>
+                </tr>`).join('');
+        }
+
+        window.editMember = (id) => {
+            const m = members.find(i => i.id === id);
+            document.getElementById('memberEditId').value = id;
+            document.getElementById('existingPhotoUrl').value = m.photoUrl || "";
+            document.getElementById('mName').value = m.name;
+            document.getElementById('mRole').value = m.role;
+            document.getElementById('mPhone').value = m.phone;
+            document.getElementById('mPos').value = m.pos;
+            document.getElementById('memberModalTitle').innerText = "Edit Member";
+            document.getElementById('memberModal').style.display = 'flex';
+        };
+
+        window.deleteSelectedMembers = async () => {
+            const checks = document.querySelectorAll('.mem-check:checked');
+            if(checks.length > 0 && confirm("Delete Selected?")) {
+                for (let c of checks) await db.doc("boardMembers/" + c.dataset.id).delete();
+            }
+        };
+
+        // --- HELPING HANDS LOGIC ---
+        window.openFamilyModal = () => {
+            document.getElementById('familyForm').reset();
+            document.getElementById('familyEditId').value = "";
+            document.getElementById('familyModalTitle').innerText = "Add Beneficiary";
+            document.getElementById('familyModal').style.display = 'flex';
+        };
+        window.closeFamilyModal = () => document.getElementById('familyModal').style.display = 'none';
+
+        document.getElementById('familyForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('familyEditId').value;
+            const btn = document.getElementById('familySaveBtn');
+            try {
+                btn.disabled = true;
+                const data = {
+                    name: document.getElementById('benName').value,
+                    dateTime: document.getElementById('benDateTime').value,
+                    spent: parseFloat(document.getElementById('benSpent').value),
+                    village: document.getElementById('benVillage').value,
+                    purpose: document.getElementById('benPurpose').value
+                };
+                if (!id) await db.collection("beneficiaryFamilies").add(data);
+                else await db.doc("beneficiaryFamilies/" + id).update(data);
+                closeFamilyModal();
+            } catch (err) { alert("Save Failed: " + err.message); }
+            finally { btn.disabled = false; }
+        };
+
+        window.renderFamilyTable = () => {
+            const filter = document.getElementById('monthFilter').value;
+            let filtered = families;
+            if (filter !== 'all') {
+                filtered = families.filter(f => new Date(f.dateTime).getMonth().toString() === filter);
+            }
+            document.getElementById('familyTableBody').innerHTML = filtered.map(f => `
+                <tr>
+                    <td><input type="checkbox" class="fam-check" data-id="${f.id}"></td>
+                    <td>${f.name}</td><td>${f.dateTime ? f.dateTime.replace('T', ' ') : 'N/A'}</td><td>₹${f.spent}</td>
+                    <td><button class="btn btn-edit" onclick="editFamily('${f.id}')">Edit</button></td>
+                </tr>`).join('');
+        };
+
+        window.editFamily = (id) => {
+            const f = families.find(i => i.id === id);
+            document.getElementById('familyEditId').value = id;
+            document.getElementById('benName').value = f.name;
+            document.getElementById('benDateTime').value = f.dateTime;
+            document.getElementById('benSpent').value = f.spent;
+            document.getElementById('benVillage').value = f.village;
+            document.getElementById('benPurpose').value = f.purpose;
+            document.getElementById('familyModalTitle').innerText = "Edit Beneficiary";
+            document.getElementById('familyModal').style.display = 'flex';
+        };
+
+        window.deleteSelectedFamilies = async () => {
+            const checks = document.querySelectorAll('.fam-check:checked');
+            if (checks.length > 0 && confirm("Delete Selected?")) {
+                for (let c of checks) await db.doc("beneficiaryFamilies/" + c.dataset.id).delete();
+            }
+        };
+
+        // --- HELPERS LOGIC ---
+        window.openDonorModal = () => {
+            document.getElementById('donorForm').reset();
+            document.getElementById('donorEditId').value = "";
+            document.getElementById('donorModalTitle').innerText = "Add Helper";
+            document.getElementById('donorModal').style.display = 'flex';
+        };
+        window.closeDonorModal = () => document.getElementById('donorModal').style.display = 'none';
+
+        document.getElementById('donorForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('donorEditId').value;
+            const btn = document.getElementById('donorSaveBtn');
+            try {
+                btn.disabled = true;
+                const data = {
+                    name: document.getElementById('donorName').value,
+                    date: document.getElementById('donorDate').value,
+                    collected: parseFloat(document.getElementById('donorCollected').value)
+                };
+                if (!id) await db.collection("donors").add(data);
+                else await db.doc("donors/" + id).update(data);
+                closeDonorModal();
+            } catch (err) { alert("Save Failed: " + err.message); }
+            finally { btn.disabled = false; }
+        };
+
+        window.renderDonorsTable = () => {
+            document.getElementById('donorsTableBody').innerHTML = donors.map(d => `
+                <tr>
+                    <td><input type="checkbox" class="donor-check" data-id="${d.id}"></td>
+                    <td>${d.name}</td><td>${d.date}</td><td>₹${d.collected}</td>
+                    <td><button class="btn btn-edit" onclick="editDonor('${d.id}')">Edit</button></td>
+                </tr>`).join('');
+        };
+
+        window.editDonor = (id) => {
+            const d = donors.find(i => i.id === id);
+            document.getElementById('donorEditId').value = id;
+            document.getElementById('donorName').value = d.name;
+            document.getElementById('donorDate').value = d.date;
+            document.getElementById('donorCollected').value = d.collected;
+            document.getElementById('donorModalTitle').innerText = "Edit Helper";
+            document.getElementById('donorModal').style.display = 'flex';
+        };
+
+        window.deleteSelectedDonors = async () => {
+            const checks = document.querySelectorAll('.donor-check:checked');
+            if (checks.length > 0 && confirm("Delete Selected?")) {
+                for (let c of checks) await db.doc("donors/" + c.dataset.id).delete();
+            }
+        };
+
+        // --- AMOUNT INFO LOGIC ---
+        window.openDataModal = () => {
+            document.getElementById('dataForm').reset();
+            document.getElementById('editId').value = "";
+            document.getElementById('dataModalTitle').innerText = "Add Donation Record";
+            document.getElementById('dataModal').style.display = 'flex';
+        };
+        window.closeDataModal = () => document.getElementById('dataModal').style.display = 'none';
+
+        document.getElementById('dataForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editId').value;
+            const btn = document.getElementById('dataSaveBtn');
+            try {
+                btn.disabled = true;
+                const data = {
+                    name: document.getElementById('name').value,
+                    date: document.getElementById('date').value,
+                    collected: parseFloat(document.getElementById('collected').value),
+                    donated: parseFloat(document.getElementById('donated').value),
+                    purpose: document.getElementById('purpose').value
+                };
+                if (!id) await db.collection("jaiBheemYouthData").add(data);
+                else await db.doc("jaiBheemYouthData/" + id).update(data);
+                closeDataModal();
+            } catch (err) { alert("Save Failed: " + err.message); }
+            finally { btn.disabled = false; }
+        };
+
+        function renderDataTable() {
+            document.getElementById('tableBody').innerHTML = entries.map(i => `
+                <tr>
+                    <td><input type="checkbox" class="row-check" data-id="${i.id}"></td>
+                    <td>${i.name}</td><td>${i.date}</td><td>₹${i.collected}</td><td>₹${i.donated}</td>
+                    <td><button class="btn btn-edit" onclick="editEntry('${i.id}')">Edit</button></td>
+                </tr>`).join('');
+        }
+
+        window.editEntry = (id) => {
+            const i = entries.find(e => e.id === id);
+            document.getElementById('editId').value = id;
+            document.getElementById('name').value = i.name;
+            document.getElementById('date').value = i.date;
+            document.getElementById('collected').value = i.collected;
+            document.getElementById('donated').value = i.donated;
+            document.getElementById('purpose').value = i.purpose || "";
+            document.getElementById('dataModalTitle').innerText = "Edit Donation Record";
+            document.getElementById('dataModal').style.display = 'flex';
+        };
+
+        window.deleteSelectedData = async () => {
+            const checks = document.querySelectorAll('.row-check:checked');
+            if (checks.length > 0 && confirm("Delete Selected?")) {
+                for (let c of checks) await db.doc("jaiBheemYouthData/" + c.dataset.id).delete();
+            }
+        };
+
+        // --- SOCIAL MEDIA LOGIC ---
+        async function loadSocialLinks() {
+            try {
+                const snap = await settingsRef.get();
+                if (snap.exists) {
+                    const d = snap.data();
+                    document.getElementById('linkYoutube').value = d.youtube || "";
+                    document.getElementById('linkInstagram').value = d.instagram || "";
+                    document.getElementById('linkFacebook').value = d.facebook || "";
+                    document.getElementById('linkWhatsapp').value = d.whatsapp || "";
+                }
+            } catch (err) { console.error("Error loading social links:", err); }
+        }
+
+        document.getElementById('socialLinksForm').onsubmit = async (e) => {
+            e.preventDefault();
+            try {
+                await settingsRef.set({
+                    youtube: document.getElementById('linkYoutube').value,
+                    instagram: document.getElementById('linkInstagram').value,
+                    facebook: document.getElementById('linkFacebook').value,
+                    whatsapp: document.getElementById('linkWhatsapp').value
+                });
+                alert("Links Updated Successfully!");
+            } catch (err) { alert("Update Failed: " + err.message); }
+        };
+    </script>
+</body>
+
+</html>
